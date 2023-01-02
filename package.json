@@ -1,7 +1,6 @@
 {
   "name": "login-by-jwt",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,7 +18,9 @@
   "homepage": "https://github.com/handongjoo/login-by-jwt#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0"
-  }
+  },
+  "description": ""
 }
