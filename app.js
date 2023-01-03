@@ -59,12 +59,27 @@ const users = [
     {id: "podong"}
 ];
 
+// 로그인 하기
+app.post('/login', (req, res) => {
+    // body에 userId 값을 넣어 보내주겠다.
+    const {userId} = req.body;
+    // users를 돌면서 값을 찾는다(users 안에 있는 (1)user.id 값과 (2)내가 body 데이터로 전달한 userId 값이 동일한 데이터를 찾는다.)
+    const user = users.find(user => user.id === userId);
+    // userToken이라는 key로 user.id를 암호화 한 값을 보내준다.
+    res.cookie("userToken", encrypt(user.id));
+ 
+    res.send(user);
+});
 
 // 유저 정보 확인
 app.get('/users', (req, res) => {
+    // 로그인 할 때 userToken으로 암호화해서 보냈으니 req.cookies.userToken으로 확인 가능
+    // res.cookies도 cookie-parser를 이용하여 사용하는 문법
     const token = req.cookies.userToken;
+
     let userId;
     try{
+        // 위의 token을 복호화한다.
         userId = decrypt(token)
     } catch {
         res.send("잘못 된 사용자")
@@ -72,20 +87,9 @@ app.get('/users', (req, res) => {
     const user = users.find(user => user.id === userId);
     console.log(user);
     // 위에서 찾은 user의 데이터 중 id의 값을 id라는 새로운 key의 value 값으로 전달한다.
-    res.send({id: user.id});
-});
-
-// 로그인 하기
-app.post('/login', (req, res) => {
-    // body에 userId 값을 넣어 보내주겠다.
-    const {userId} = req.body;
-    // users를 돌면서 값을 찾는다(users 안에 있는 (1)user.id 값과 (2)내가 body 데이터로 전달한 userId 값이 동일한 데이터를 찾는다.)
-    const user = users.find(user => user.id === userId);
-
-    res.cookie("userToken", encrypt(user.id));
-    // 쿠키 값을 key("ssid"):value(ssid)로 보내준다.  
     res.send(user);
 });
+
 
 app.post('/logout', (req, res) => {
     res.send("logout page");
